@@ -1,0 +1,38 @@
+@import '../../sass/Vars';
+
+.page {
+    position: relative;
+    .text {
+        padding: 1rem;
+        line-height: 1.5em;
+
+        strong {
+            display: block;
+            margin-bottom: 1em;
+            font-weight: 400;
+        }
+        p {
+            display: block;
+            margin-bottom: 1em;
+        }
+    }
+    .imagewrapper {
+        width: 18rem;
+        max-height: 24rem;
+
+        @media #{$phonescape} {
+            width: 30rem;
+            max-height: 40rem;
+        }
+
+        @media #{$tablet}
+        {
+            position: absolute;
+            right: 1rem;
+            top:0;
+            width: 16rem;
+            max-height: 21.33rem;
+        }
+
+    }
+}

@@ -1,0 +1,61 @@
+@import '../../sass/Vars';
+
+.portfolios {
+    clear: both;
+    position: relative;
+    z-index: 1;
+
+
+    .portfolio-item {
+        // background-color: red;
+        // .imagewrapper {
+        //     background-color: green;
+        // }
+        // width: 18rem;
+        margin: 0 auto;
+        margin-bottom: 4rem;
+        width: calc( 100vw - 2rem );
+        height: 50vh;
+        @media #{$phonescape}
+        {
+            width: calc( 50vw - 4rem );
+            height: calc( 75vh - 4rem );
+            margin:0;
+            float: left;
+            padding: 2rem;
+        }
+
+        opacity: 0;
+
+        -webkit-transition: opacity 500ms linear;
+        -ms-transition: opacity 500ms linear;
+        transition: opacity 500ms linear;
+
+        // @media #{$phonescape}
+        // {
+        //     width: 30rem;
+        // }
+        // @media #{$tablet}
+        // {
+        //     padding: 1rem;
+        //     float: left;
+        //     width: 20rem;
+        //     padding-top:0;
+        // }
+        // @media #{$desktop}
+        // {
+        //     width: 30rem;
+        // }
+    }
+    .highlight {
+        @media #{$phonescape}
+        {
+            width: calc( 100vw - 4rem );
+            height: calc( 75vh - 4rem );
+            margin:0;
+            float: left;
+            padding: 1rem;
+        }
+    }
+}
+

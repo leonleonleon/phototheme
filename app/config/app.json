@@ -1,0 +1,6 @@
+{
+    "API_URL"           : "http://photo.leonreindl.de/wp-json/wp/v2",
+    "PORTFOLIOS_API"    : "portfolios-api",
+    "CV_ID"             : "16",
+    "PORTFOLIO_SLUG"    : "portfolio"
+}

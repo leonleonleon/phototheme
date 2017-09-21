@@ -1,7 +1,5 @@
 import React                    from 'react';
 import PropTypes                from 'prop-types';
-import { reqAnimationFrame }    from 'utils/helperUtils.js';
-import Preloader                from 'preloader/Preloader.jsx';
 import './Image.scss';
 /**
  *  Image Component
@@ -24,10 +22,6 @@ export default class Image extends React.Component
     {
         super( ...arguments );
 
-        this.state = {
-            preloader : true,
-            max       : 200,
-        };
     }
 
     /**
@@ -37,37 +31,26 @@ export default class Image extends React.Component
      */
     componentDidMount()
     {
-        reqAnimationFrame( () =>
-        {
-            const node = this.imageWrapper;
-            const width = node.clientWidth;
-            const height = node.clientHeight;
-            // console.log(width);
-            const max = Math.min( width, height ) * 2;
-
-            this.setState( {
-                preloader : false,
-                max       : max,
-            } );
-        } );
 
     }
+
     /**
      *  getImageUrl
      *
      * @param {sizes} [sizes] all the availeble image sizes
-     * @param {max} [max] max need size
      *
-     * @returns {ImageUrl} [image url]
+     * @returns {srcSet} [set of image urls]
      */
-    getImageUrl( sizes, max )
+    getImageUrl( sizes )
     {
         let counter = 0;
         const images = [];
         let tempUrl = '';
         let tempWidth = 0;
+        let srcSet = '';
+
         {
-            Object.keys( sizes ).map( ( key ) =>
+            Object.keys( sizes ).forEach( ( key ) =>
             {
                 counter += 1;
                 if ( counter === 1 )
@@ -87,41 +70,13 @@ export default class Image extends React.Component
             } );
         }
 
-        for ( let i = 0; i < images.length; i++ )
+        for ( let i = 0; i < ( images.length - 1 ); i++ )
         {
             const imgMax = Math.min( images[ i ][ 1 ], images[ i ][ 2 ] );
-            if ( imgMax >= max )
-            {
-                return images[ i ][ 0 ];
-            }
+            srcSet += `${images[ i ][ 0 ]} ${imgMax}w, `;
         }
 
-        return images[ images.length - 1 ][ 0 ];
-    }
-
-    /**
-     *  handleImageLoaded
-     *  change parent opacity / fadeIn
-     */
-    handleImageLoaded()
-    {
-        // this.imageWrapper.style.opacity = 1;
-        if ( this.imageWrapper.parentNode.parentNode != undefined )
-        {
-            this.imageWrapper.parentNode.parentNode.style.opacity  = 1;
-        }
-        if ( this.imageWrapper.parentNode != undefined )
-        {
-            this.imageWrapper.parentNode.style.opacity  = 1;
-        }
-        // if ( this.imageWrapper.parentNode.parentNode.parentNode != undefined )
-        // {
-        //     this.imageWrapper.parentNode.parentNode.parentNode.style.opacity  = 1;
-        // }
-        if ( this.imageWrapper.firstChild != undefined )
-        {
-            this.imageWrapper.firstChild.style.opacity  = 1;
-        }
+        return srcSet;
     }
 
     /**
@@ -140,30 +95,11 @@ export default class Image extends React.Component
      */
     render()
     {
-        const { preloader, max } = this.state;
+        const imagesObject = this.props.image.sizes;
 
-        if ( preloader )
-        {
+        const srcSet = this.getImageUrl( imagesObject );
 
-            return  (
-                <div
-                    className={ `imagewrapper ${this.props.align}
-                    ${this.props.valign}` }
-                    ref={ imageWrapper => this.imageWrapper = imageWrapper }
-                >
-                    <Preloader />
-                </div>
-            );
-        }
-
-        const imageUrl = this.getImageUrl( this.props.image.sizes, max );
-
-        // let highlightClass = '';
-
-        // if ( this.props.highlight )
-        // {
-        //     highlightClass = 'highlight';
-        // }
+        const initialSrc = imagesObject[ 'full256' ];
 
         return  (
             <div
@@ -172,10 +108,10 @@ export default class Image extends React.Component
                 ref={ imageWrapper => this.imageWrapper = imageWrapper }
             >
                 <img
-                    onLoad={ this.handleImageLoaded.bind( this ) }
-                    src={ imageUrl }
+                    src={ initialSrc }
                     onClick={ this.handleClick.bind( this ) }
                     ref={ imageObject => this.imageObject = imageObject }
+                    srcSet={ srcSet }
                 />
             </div>
         );

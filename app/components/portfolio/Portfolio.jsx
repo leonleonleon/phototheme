@@ -103,8 +103,7 @@ export default class Portfolio extends React.PureComponent
 
         if ( preloader || !portfolio ) return <Preloader />;
 
-        const slideOne      = [ cloneDeep( portfolio.acf.slides[ 0 ] ) ];
-        const slidesRest    = cloneDeep( portfolio.acf.slides.slice( 1 ) );
+        const slides      = portfolio.acf.slides;
 
         const bgcolor = portfolio.acf.background_color;
         const body = document.getElementsByTagName( 'body' )[ 0 ];
@@ -119,28 +118,7 @@ export default class Portfolio extends React.PureComponent
                     </Link>
                 </div>
                 <Title content={ portfolio.title.rendered } />
-                <Slide>{ slideOne }</Slide>
-                {/*
-                <Text content={ portfolio.content.rendered } />*/}
-                <Slide>{ slidesRest }</Slide>
-                {/*<div className="arrows">
-                    <div className="previousArrow">
-                        {
-                            portfolios &&
-                            <Link to={ this.getPreviousPortfolioLink() }>
-                                <i className="fa fa-angle-left" aria-hidden="true" /> previous
-                            </Link>
-                        }
-                    </div>
-                    <div className="nextArrow">
-                        {
-                            portfolios &&
-                            <Link to={ this.getNextPortfolioLink() }>
-                                next <i className="fa fa-angle-right" aria-hidden="true" />
-                            </Link>
-                        }
-                    </div>
-                </div>*/}
+                <Slide>{ slides }</Slide>
             </div>
         );
     }

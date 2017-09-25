@@ -13,7 +13,7 @@ render(
     <Router history={ browserHistory } onUpdate={ () => window.scrollTo( 0, 0 ) } >
         <Route path="/" component={ App }>
             <IndexRoute component={ Portfolios } />
-            <Route path="/:portfolio" component={ Portfolios } />
+            <Route path="/:portfolio/" component={ Portfolios } />
             <Route path="/:portfolio/:index" component={ Portfolios } />
         </Route>
     </Router>

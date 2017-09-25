@@ -115,7 +115,7 @@ export default class Portfolios extends React.PureComponent
         else
         {
             const newPortfolio = slides[ 0 ].portfolio;
-            browserHistory.push( `/${newPortfolio}` );
+            browserHistory.push( `/${newPortfolio}/` );
         }
     }
     /**
@@ -211,9 +211,9 @@ export default class Portfolios extends React.PureComponent
     {
         const { portfolio, index } = this.props.params;
 
-        const antiZero = index != undefined ? parseInt( index ) : 0;
+        const defaultIndex = index != undefined ? parseInt( index ) : 0;
 
-        return portfolio === slide.portfolio && antiZero === slide.index;
+        return portfolio === slide.portfolio && defaultIndex === slide.index;
 
         // if ( portfolio === slide.portfolio && parseInt( index ) === slide.index )
         // {
@@ -237,7 +237,7 @@ export default class Portfolios extends React.PureComponent
         if ( preloader || slides.length === 0 ) return <Preloader />;
 
         const currentSlide = slides.find( this.findSlide );
-        const current = currentSlide.slideIndex;
+        const current = currentSlide === undefined ? 0 : currentSlide.slideIndex;
 
         const slideNum = slides.length - 1;
 

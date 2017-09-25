@@ -1,4 +1,4 @@
-<script async type="text/javascript" src="/wp-content/themes/leonphoto/prod/js/app.min.js"></script>
+<script async type="text/javascript" src="/wp-content/themes/phototheme/prod/js/app.min.js"></script>
 <?php
 
 wp_footer();

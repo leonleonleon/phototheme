@@ -55,8 +55,8 @@ endif;
     <meta property="og:url" content="<?php echo $url; ?>" />
     <link rel="apple-touch-icon" href="<?php echo get_template_directory_uri(); ?>/img/touch-icon-iphone.png">
     <link rel="apple-touch-icon" sizes="180x180" href="<?php echo get_template_directory_uri(); ?>/img/touch-icon-iphone-retina.png">
-    <link rel="stylesheet" href="/wp-content/themes/leonphoto/font-awesome/css/font-awesome.min.css" />
-    <link href="/wp-content/themes/leonphoto/prod/css/app.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/wp-content/themes/phototheme/font-awesome/css/font-awesome.min.css" />
+    <link href="/wp-content/themes/phototheme/prod/css/app.css" rel="stylesheet"/>
 
 <?php
     wp_head();

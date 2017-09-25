@@ -37,6 +37,11 @@ a:active {
   width: 100%;
   min-height: 100vh; }
 
+.site {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden; }
+
 .backfont {
   width: 100%;
   position: fixed;
@@ -63,35 +68,16 @@ a:active {
       .footer ul li i {
         font-size: 1.5rem; }
 .portfolios {
-  clear: both;
+  width: calc(100% - 2rem);
+  height: calc(100% - 2rem);
+  margin: 1rem;
   position: relative;
-  z-index: 1; }
-  .portfolios .portfolio-item {
-    margin: 0 auto;
-    margin-bottom: 4rem;
-    width: calc( 100vw - 2rem);
-    height: 50vh;
-    -webkit-transition: opacity 500ms linear;
-    -ms-transition: opacity 500ms linear;
-    transition: opacity 500ms linear; }
-    @media (min-width: 568px) {
-      .portfolios .portfolio-item {
-        width: calc( 50vw - 4rem);
-        height: calc( 75vh - 4rem);
-        margin: 0;
-        float: left;
-        padding: 2rem; } }
-  @media (min-width: 568px) {
-    .portfolios .highlight {
-      width: calc( 100vw - 4rem);
-      height: calc( 75vh - 4rem);
-      margin: 0;
-      float: left;
-      padding: 1rem; } }
+  z-index: 1;
+  overflow: hidden;
+  transition: opacity 5ms; }
 .imagewrapper {
-  width: 100%;
-  height: 100%;
-  position: relative;
+  width: 100vw;
+  height: 100vh;
   top: 0;
   left: 0; }
   .imagewrapper img {
@@ -102,12 +88,8 @@ a:active {
 @media (min-width: 568px) {
   .center img, .left img, .right img {
     position: absolute;
-    max-height: 60%;
-    max-width: 60%;
-    transition: 750ms; }
-  .highlight .imagewrapper img {
-    max-height: calc( 100% - 2rem);
-    max-width: calc( 100% - 2rem); }
+    max-height: 75%;
+    max-width: 75%; }
   .left.top img {
     top: 0;
     left: 0; }
@@ -139,7 +121,22 @@ a:active {
     transform: translate(0, -50%); }
   .right.bottom img {
     bottom: 0;
-    right: 0; } }
+    right: 0; }
+  .imagewrapper.highlight img {
+    right: auto;
+    bottom: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 100%;
+    max-height: 100%; } }
+
+.imagewrapper.hidden {
+  position: absolute;
+  z-index: 0;
+  opacity: 0;
+  top: 0;
+  left: 0; }
 .preloader {
   border: 0.25rem solid #ddd;
   border-radius: 50%;
@@ -206,6 +203,9 @@ a:active {
     .portfolio .highlight {
       width: calc( 100vw - 2rem);
       clear: both; } }
+  @media screen and (orientation: portrait) {
+    .portfolio .slide {
+      height: 40vh; } }
   .portfolio .imagewrapper {
     padding: 0;
     margin: 1rem; }
@@ -213,10 +213,6 @@ a:active {
       .portfolio .imagewrapper {
         margin: 0; } }
     .portfolio .imagewrapper img {
-      opacity: 0;
-      -webkit-transition: opacity 500ms linear;
-      -ms-transition: opacity 500ms linear;
-      transition: opacity 500ms linear;
       margin: 0 auto;
       display: block; }
   .portfolio a:link, .portfolio a:visited {
@@ -236,4 +232,7 @@ a:active {
     top: 50% !important;
     left: 50% !important;
     transform: translate(-50%, -50%) !important;
-    z-index: 4; }
+    z-index: 4;
+    -webkit-box-shadow: 0px 0px 1.5rem 0.5rem rgba(0, 0, 0, 0.23);
+    -moz-box-shadow: 0px 0px 1.5rem 0.5rem rgba(0, 0, 0, 0.23);
+    box-shadow: 0px 0px 1.5rem 0.5rem rgba(0, 0, 0, 0.23); }

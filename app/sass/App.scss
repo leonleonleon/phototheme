@@ -32,6 +32,8 @@ body
     -webkit-font-smoothing: antialiased;
 
     overflow-y: scroll;
+
+    background-color: red;
 }
 
 a:link , a:visited {
@@ -58,6 +60,12 @@ a:active {
     //     width: 64rem;
     // }
     min-height: 100vh;
+}
+
+.site {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
 }
 
 .backfont {

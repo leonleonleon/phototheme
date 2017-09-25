@@ -11,6 +11,8 @@ export default class Image extends React.Component
         align     : PropTypes.string,
         valign    : PropTypes.string,
         highlight : PropTypes.bool,
+        wrapper   : PropTypes.func,
+        hidden    : PropTypes.bool,
     }
 
     /**
@@ -21,7 +23,6 @@ export default class Image extends React.Component
     constructor()
     {
         super( ...arguments );
-
     }
 
     /**
@@ -72,21 +73,17 @@ export default class Image extends React.Component
 
         for ( let i = 0; i < ( images.length - 1 ); i++ )
         {
-            const imgMax = Math.min( images[ i ][ 1 ], images[ i ][ 2 ] );
-            srcSet += `${images[ i ][ 0 ]} ${imgMax}w, `;
+            const imgMax = Math.max( images[ i ][ 1 ], images[ i ][ 2 ] );
+            const ratio =  window.innerWidth / window.innerHeight;
+
+            const width = Math.round( imgMax * ratio );
+
+            srcSet += `${images[ i ][ 0 ]} ${width}w, `;
         }
 
         return srcSet;
     }
 
-    /**
-     *  handleClick
-     *  zoom in
-     */
-    handleClick()
-    {
-        this.imageObject.classList.toggle( 'zoom' );
-    }
 
     /**
      *  Image Render
@@ -101,16 +98,34 @@ export default class Image extends React.Component
 
         const initialSrc = imagesObject[ 'full256' ];
 
+        const highlight = this.props.highlight ? 'highlight' : '';
+
+        if ( this.props.hidden )
+        {
+            return  (
+                <div
+                    className={ `imagewrapper ${this.props.align}
+                    ${this.props.valign} ${highlight} hidden` }
+                >
+                    <img
+                        src={ initialSrc }
+                        srcSet={ srcSet }
+                    />
+                </div>
+            );
+        }
+
+
         return  (
             <div
                 className={ `imagewrapper ${this.props.align}
-                ${this.props.valign}` }
+                ${this.props.valign} ${highlight}` }
                 ref={ imageWrapper => this.imageWrapper = imageWrapper }
             >
                 <img
                     src={ initialSrc }
-                    onClick={ this.handleClick.bind( this ) }
                     ref={ imageObject => this.imageObject = imageObject }
+                    onLoad={ this.props.wrapper }
                     srcSet={ srcSet }
                 />
             </div>

@@ -5,9 +5,7 @@ import Preloader        from 'preloader/Preloader.jsx';
 import Title            from 'portfolio/Title.jsx';
 // import Text             from 'portfolio/Text.jsx';
 import { PORTFOLIO_SLUG }   from 'config/app.json';
-import { findIndex,
-         cloneDeep }    from 'lodash';
-import Slide            from 'Slide.jsx';
+import { findIndex }    from 'lodash';
 
 import './Portfolio.scss';
 
@@ -103,8 +101,6 @@ export default class Portfolio extends React.PureComponent
 
         if ( preloader || !portfolio ) return <Preloader />;
 
-        const slides      = portfolio.acf.slides;
-
         const bgcolor = portfolio.acf.background_color;
         const body = document.getElementsByTagName( 'body' )[ 0 ];
         body.style.backgroundColor = bgcolor;
@@ -118,7 +114,6 @@ export default class Portfolio extends React.PureComponent
                     </Link>
                 </div>
                 <Title content={ portfolio.title.rendered } />
-                <Slide>{ slides }</Slide>
             </div>
         );
     }

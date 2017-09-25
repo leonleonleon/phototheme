@@ -115,7 +115,7 @@ export default class App extends React.Component
         }
         else
         {
-            element.removeAttribute( 'style' );
+            element.style.background = '#fafafa';
         }
     }
 

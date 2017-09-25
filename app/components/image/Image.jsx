@@ -1,5 +1,6 @@
 import React                    from 'react';
 import PropTypes                from 'prop-types';
+import Preloader        from 'preloader/Preloader.jsx';
 import './Image.scss';
 /**
  *  Image Component
@@ -73,7 +74,7 @@ export default class Image extends React.Component
 
         for ( let i = 0; i < ( images.length - 1 ); i++ )
         {
-            const imgMax = Math.max( images[ i ][ 1 ], images[ i ][ 2 ] );
+            const imgMax = Math.min( images[ i ][ 1 ], images[ i ][ 2 ] );
             const ratio =  window.innerWidth / window.innerHeight;
 
             const width = Math.round( imgMax * ratio );
@@ -100,12 +101,12 @@ export default class Image extends React.Component
 
         const highlight = this.props.highlight ? 'highlight' : '';
 
+
         if ( this.props.hidden )
         {
             return  (
                 <div
-                    className={ `imagewrapper ${this.props.align}
-                    ${this.props.valign} ${highlight} hidden` }
+                    style={ { visibility : 'hidden' }, { overflow : 'none' } }
                 >
                     <img
                         src={ initialSrc }
@@ -122,6 +123,9 @@ export default class Image extends React.Component
                 ${this.props.valign} ${highlight}` }
                 ref={ imageWrapper => this.imageWrapper = imageWrapper }
             >
+                <div className="loader">
+                    <Preloader />
+                </div>
                 <img
                     src={ initialSrc }
                     ref={ imageObject => this.imageObject = imageObject }

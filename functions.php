@@ -1,4 +1,6 @@
 <?php
+
+remove_action('template_redirect', 'redirect_canonical');
 // add image sizes
 $startsize = 256;
 $steps = 256;

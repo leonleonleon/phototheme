@@ -3,12 +3,11 @@ import React                from 'react';
 import PropTypes            from 'prop-types';
 // import Footer               from 'footer/Footer.jsx';
 // import Header               from 'header/Header.jsx';
-import { isEqual,
-         findIndex,
+import { findIndex,
          cloneDeep }        from 'lodash';
 import { API_URL,
         PORTFOLIOS_API,
-        CV_ID }             from 'config/app.json';
+            }             from 'config/app.json';
 
 /**
  *  App Component
@@ -27,8 +26,8 @@ export default class App extends React.Component
     state = {
         portfolios  : null,
         portfolio   : null,
-        page        : null,
         preloader   : true,
+        slides      : null,
     }
 
     /**
@@ -56,18 +55,6 @@ export default class App extends React.Component
      */
     fetchData()
     {
-        const portfolioSlug = this.props.params.portfolio;
-
-        // load story
-        // if ( this.props.location.pathname == '/CV' && !this.state.page )
-        if ( !this.state.page &&
-            ( this.props.location.pathname == '/CV/' || this.props.location.pathname == '/CV' ) )
-        {
-            fetch( `${API_URL}/pages/${CV_ID}` )
-                .then( resp => resp.json() )
-                .then( page => this.setState( { page } ) );
-        }
-
         // load all portfolios into state initially:
         if ( !this.state.portfolios )
         {
@@ -76,26 +63,34 @@ export default class App extends React.Component
                 .then(
                     portfolios =>
                     {
+
+                        const tempSlides = [];
+                        let counter = 0;
+
+                        portfolios.map( ( portfolio ) =>
+                        {
+                            portfolio.acf.slides.map( ( slide, index ) =>
+                            {
+                                const newSlide = slide;
+                                newSlide[ 'portfolio' ] = portfolio.slug;
+                                newSlide[ 'portfolioTitle' ] = portfolio.title.rendered;
+                                newSlide[ 'index' ] = index;
+                                newSlide[ 'slideIndex' ] = counter;
+
+                                counter += 1;
+                                tempSlides.push( newSlide );
+                            } );
+                        } );
+
                         const newState = {
                             portfolios  : cloneDeep( portfolios ),
                             preloader   : false,
+                            slides      : tempSlides,
                         };
-
-                        if ( portfolioSlug )
-                        {
-                            newState.portfolio = this.getPortfolio( portfolios, portfolioSlug );
-                        }
 
                         this.setState( newState );
                     } )
                 .catch( error => console.error( error ) );
-        }
-        else
-        {
-            this.setState( {
-                portfolio  : this.getPortfolio( this.state.portfolios, portfolioSlug ),
-                preloader   : false,
-            } );
         }
 
     }
@@ -105,11 +100,7 @@ export default class App extends React.Component
      */
     changeBackground( element )
     {
-        if ( this.props.location.pathname == '/CV/' || this.props.location.pathname == '/CV' )
-        {
-            element.style.background = '#fafafa';
-        }
-        else if ( this.props.location.pathname == '/' )
+        if ( this.props.location.pathname == '/' )
         {
             element.style.background = '#fff';
         }
@@ -133,33 +124,6 @@ export default class App extends React.Component
         this.changeBackground( body );
 
     }
-    /**
-     *  componentDidUpdate
-     *
-     *  @param {Object} prevProps       props before last change
-     */
-    componentDidUpdate( prevProps )
-    {
-        if ( !isEqual( prevProps.location, this.props.location ) )
-        {
-            this.setState( {
-                preloader   : true,
-                portfolio   : null,
-            } );
-
-            const body = document.getElementsByTagName( 'body' )[ 0 ];
-
-            // if ( body.scrollTop !== 0 )
-            // {
-            //     body.scrollTop = 0;
-            // }
-
-            this.changeBackground( body );
-
-
-            this.fetchData();
-        }
-    }
 
     /**
      *  App Render
@@ -170,7 +134,6 @@ export default class App extends React.Component
     {
         return (
             <div className="site">
-                {/*<Header />*/}
                 <div className="backfont">Leon Reindl</div>
 
                 {
@@ -179,8 +142,6 @@ export default class App extends React.Component
                         child => React.cloneElement( child, this.state )
                     )
                 }
-
-                {/*<Footer />*/}
             </div>
         );
     }

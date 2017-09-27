@@ -4,6 +4,7 @@ import PropTypes        from 'prop-types';
 import Image            from 'image/Image.jsx';
 
 import Preloader        from 'preloader/Preloader.jsx';
+import Title            from './Title.jsx';
 
 import { browserHistory }        from 'react-router';
 
@@ -16,27 +17,11 @@ export default class Portfolios extends React.PureComponent
         preloader   : PropTypes.bool,
         portfolios  : PropTypes.array,
         params      : PropTypes.object,
+        slides      : PropTypes.array,
     }
 
-    state = {
-        current : 0,
-        slides  : [],
-    }
 
     /**
-     * componentWillUpdate
-     */
-    componentWillUpdate( )
-    {
-        // if ( this.portfoliosObject != undefined )
-        // {
-        //     // const img = this.portfoliosObject;
-        //     // img.style.opacity = 0;
-        //     this.toggleOpacity();
-        // }
-    }
-
-        /**
      * keyDown
      *
      * @param {event} event [description]
@@ -50,7 +35,7 @@ export default class Portfolios extends React.PureComponent
         } // for old IE compatible
         const keycode = evt.keyCode || evt.which; // also for cross-browser compatible
 
-        const { slides } = this.state;
+        const { slides } = this.props;
         const currentSlide = slides.find( this.findSlide );
         const current = currentSlide.slideIndex;
 
@@ -170,39 +155,6 @@ export default class Portfolios extends React.PureComponent
     }
 
     /**
-     * componentWillReceiveProps
-     *
-     * @param {[props]} [nextProps] [description]
-     */
-    componentWillReceiveProps( nextProps )
-    {
-        const portfolios = nextProps.portfolios;
-        const { slides } = this.state;
-
-        if ( portfolios != undefined && slides.length === 0 )
-        {
-            const tempSlides = [];
-            let counter = 0;
-
-            portfolios.map( ( portfolio ) =>
-            {
-                portfolio.acf.slides.map( ( slide, index ) =>
-                {
-                    const newSlide = slide;
-                    newSlide[ 'portfolio' ] = portfolio.slug;
-                    newSlide[ 'index' ] = index;
-                    newSlide[ 'slideIndex' ] = counter;
-
-                    counter += 1;
-                    tempSlides.push( newSlide );
-                } );
-            } );
-
-            this.setState( { slides : tempSlides } );
-        }
-    }
-
-    /**
      * findSlide
      * @param  {[object]} slide [description]
      * @return {[object]}       [description]
@@ -228,11 +180,9 @@ export default class Portfolios extends React.PureComponent
      */
     render()
     {
-        const { preloader } = this.props;
-        const { slides } = this.state;
+        const { preloader, slides } = this.props;
 
         // const { portfolio, index } = this.props.params;
-
 
         if ( preloader || slides.length === 0 ) return <Preloader />;
 
@@ -245,6 +195,8 @@ export default class Portfolios extends React.PureComponent
 
         const prev = current - 1 >= 1 ? current - 1 : slideNum;
 
+        const title = slides[ current ].title != '' ? slides[ current ].title : slides[ current ].portfolioTitle; //eslint-disable-line
+
         return (
             <div
                 className="portfolios"
@@ -255,10 +207,11 @@ export default class Portfolios extends React.PureComponent
                     image={ slides[ current ].image }
                     align={ slides[ current ].align }
                     valign={ slides[ current ].valign }
-                    wrapper={ this.showWrapper.bind( this ) }
+                    loadFunc={ this.showWrapper.bind( this ) }
                     highlight={ slides[ current ].highlight }
                     hidden={ false }
                 />
+                <Title>{ title }</Title>
                 <Image
                     image={ slides[ next ].image }
                     hidden={ true }

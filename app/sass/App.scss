@@ -66,20 +66,32 @@ a:active {
     overflow: hidden;
 }
 
-.backfont {
-    width: 100%;
+// .backfont {
+//     width: 100%;
 
-    position: fixed;
-    top: calc( 50% - 3vw );
-    left: 0;
-    font-size: 6vw;
+//     position: fixed;
+//     top: calc( 50% - 3vw );
+//     left: 0;
+//     font-size: 5vw;
+//     text-transform: uppercase;
+//     text-align: center;
+//     width: 100%;
+//     color: #ddd;
+
+// }
+.backfont {
+    z-index: 2;
+    top: 1rem;
+    left: 1rem;
     text-transform: uppercase;
-    text-align: center;
-    width: 100%;
-    color: #ddd;
+    position: absolute;
+    &:hover{
+        &:after{
+            content: ' info@leonreindl.de';
+        }
+    }
 
 }
-
 .footer {
     display: block;
     clear: both;

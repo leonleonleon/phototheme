@@ -1,12 +1,13 @@
 @import '../../sass/Vars';
 
 .imagewrapper {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     top: 0;
     left: 0;
 
     img {
+        margin-top: 2rem;
         max-width: 100%;
         max-height: 100%;
         image-rendering: auto;
@@ -17,6 +18,7 @@
 @media #{$phonescape} {
     .center, .left, .right {
         img {
+            margin: 0;
             position: absolute;
             max-height: 65vh;
             max-width: 50vw;
@@ -91,8 +93,8 @@
             top:50%;
             left:50%;
             transform: translate( -50%, -50% );
-            max-width: 100%;
-            max-height: 100%;
+            max-width: calc(100% - 4rem);
+            max-height: calc(100% - 4rem);
         }
     }
 }

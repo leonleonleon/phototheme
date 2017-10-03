@@ -20,6 +20,9 @@ export default class Portfolios extends React.PureComponent
         slides      : PropTypes.array,
     }
 
+    state = {
+        imageLoaded : false,
+    }
 
     /**
      * keyDown
@@ -69,16 +72,29 @@ export default class Portfolios extends React.PureComponent
     {
         if ( this.portfoliosObject != undefined )
         {
-            this.portfoliosObject.classList.add( 'hidden' );
+            this.portfoliosObject.classList.remove( 'show' );
         }
+
+        this.setState( { imageLoaded : false } );
     }
     showWrapper = () =>
     {
         if ( this.portfoliosObject != undefined )
         {
-            this.portfoliosObject.classList.remove( 'hidden' );
+            this.portfoliosObject.classList.add( 'show' );
         }
+
+        this.setState( { imageLoaded : true } );
     }
+    /**
+     * ImagePreloaded
+     * @return {[null]} [null]
+     */
+    imagePreloaded = ( ) =>
+    {
+        return null;
+    }
+
     /**
      * nextSlide
      * @param  {[number]} current [description]
@@ -88,6 +104,8 @@ export default class Portfolios extends React.PureComponent
     {
         this.hideWrapper();
 
+        // setTimeout( () =>
+        // {
         if ( ( current + 1 ) < slides.length )
         {
             const newCurrent = current + 1;
@@ -102,7 +120,9 @@ export default class Portfolios extends React.PureComponent
             const newPortfolio = slides[ 0 ].portfolio;
             browserHistory.push( `/${newPortfolio}/` );
         }
+        // }, 250 );
     }
+
     /**
      * prevSlide
      * @param  {[number]} current [description]
@@ -112,6 +132,8 @@ export default class Portfolios extends React.PureComponent
     {
         this.hideWrapper();
 
+        // setTimeout( () =>
+        // {
         if ( ( current - 1 ) >= 0 )
         {
             const newCurrent = current - 1;
@@ -130,6 +152,7 @@ export default class Portfolios extends React.PureComponent
 
             browserHistory.push( `/${newPortfolio}/${newIndex}` );
         }
+        // }, 250 );
     }
 
     /**
@@ -140,6 +163,8 @@ export default class Portfolios extends React.PureComponent
      */
     handleClick( slides, event, current )
     {
+        event.preventDefault();
+
         const mouseX = event.pageX;
         const windowCenter = window.innerWidth / 2;
 
@@ -187,7 +212,8 @@ export default class Portfolios extends React.PureComponent
         if ( preloader || slides.length === 0 ) return <Preloader />;
 
         const currentSlide = slides.find( this.findSlide );
-        const current = currentSlide === undefined ? 0 : currentSlide.slideIndex;
+        const random = Math.floor( Math.random() * ( slides.length - 1 ) );
+        const current = currentSlide === undefined ? random : currentSlide.slideIndex;
 
         const slideNum = slides.length - 1;
 
@@ -197,11 +223,67 @@ export default class Portfolios extends React.PureComponent
 
         const title = slides[ current ].title != '' ? slides[ current ].title : slides[ current ].portfolioTitle; //eslint-disable-line
 
+        const body = document.getElementsByTagName( 'body' )[ 0 ];
+
+        body.style.background = slides[ current ].background;
+
+                //<Image
+                //    image={ slides[ next ].image }
+                //    hidden={ true }
+                ///>
+                //<Image
+                //    image={ slides[ prev ].image }
+                //    hidden={ true }
+                ///>
+        if ( this.state.imageLoaded )
+        {
+            return (
+                <div className="wrapper">
+                    <div
+                        className="portfolios show"
+                        ref={ portfoliosObject => this.portfoliosObject = portfoliosObject }
+                        onClick={ ( event ) => this.handleClick( slides, event, current ) }
+                    >
+                        <Image
+                            image={ slides[ current ].image }
+                            align={ slides[ current ].align }
+                            valign={ slides[ current ].valign }
+                            loadFunc={ this.imagePreloaded.bind( this ) }
+                            highlight={ slides[ current ].highlight }
+                        />
+                        <Title>{ title }</Title>
+
+                    </div>
+                    <div
+                        className="portfolios"
+                    >
+                        <Image
+                            image={ slides[ next ].image }
+                            align={ slides[ next ].align }
+                            valign={ slides[ next ].valign }
+                            loadFunc={ this.imagePreloaded.bind( this ) }
+                            highlight={ slides[ next ].highlight }
+                        />
+                    </div>
+                    <div
+                        className="portfolios"
+                    >
+                        <Image
+                            image={ slides[ prev ].image }
+                            align={ slides[ prev ].align }
+                            valign={ slides[ prev ].valign }
+                            loadFunc={ this.imagePreloaded.bind( this ) }
+                            highlight={ slides[ prev ].highlight }
+                        />
+                    </div>
+                </div>
+            );
+        }
+
         return (
             <div
                 className="portfolios"
                 ref={ portfoliosObject => this.portfoliosObject = portfoliosObject }
-                onClick={ ( event ) => this.handleClick( slides, event, current ) }
             >
                 <Image
                     image={ slides[ current ].image }
@@ -209,18 +291,13 @@ export default class Portfolios extends React.PureComponent
                     valign={ slides[ current ].valign }
                     loadFunc={ this.showWrapper.bind( this ) }
                     highlight={ slides[ current ].highlight }
-                    hidden={ false }
                 />
-                <Title>{ title }</Title>
-                <Image
-                    image={ slides[ next ].image }
-                    hidden={ true }
-                />
-                <Image
-                    image={ slides[ prev ].image }
-                    hidden={ true }
-                />
+                <div className="loader">
+                    <Preloader />
+                </div>
+
             </div>
         );
     }
 }
+

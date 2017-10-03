@@ -1,10 +1,13 @@
 .preloader {
-  height: 0.5rem;
-  background-color: #eee;
+  height: 0.25rem;
+  background-color: #333;
   width: 0vw;
 
   -webkit-animation: spin 2s ease-out infinite;
   animation: spin 2s ease-out infinite;
+
+  -webkit-animation-delay: 200ms; /* Safari */
+  animation-delay: 200ms;
 }
 
 @-webkit-keyframes spin {

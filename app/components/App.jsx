@@ -109,6 +109,41 @@ export default class App extends React.Component
             element.style.background = '#fafafa';
         }
     }
+    /**
+     * mouseMove
+     * @param  {[event]} event [description]
+     */
+    mouseMove = ( event ) =>
+    {
+        const mouseX = event.clientX;
+        const windowCenter = window.innerWidth / 2;
+
+        // left
+        if ( mouseX < windowCenter )
+        {
+            document.getElementsByTagName( 'body' )[ 0 ].classList.remove( 'right' );
+            document.getElementsByTagName( 'body' )[ 0 ].classList.add( 'left' );
+        }
+        else
+        {
+            document.getElementsByTagName( 'body' )[ 0 ].classList.remove( 'left' );
+            document.getElementsByTagName( 'body' )[ 0 ].classList.add( 'right' );
+        }
+    }
+    //  /**
+    //  * componentWillMount
+    //  */
+    // componentWillMount()
+    // {
+    //     window.addEventListener( 'onMouseMove', this.mouseMove.bind( this ) );
+    // }
+    // /**
+    //  * componentWillUnmount
+    //  */
+    // componentWillUnmount()
+    // {
+    //     window.removeEventListener( 'onMouseMove', this.mouseMove.bind( this ) );
+    // }
 
     /**
      * ## componentDidMount
@@ -123,6 +158,8 @@ export default class App extends React.Component
 
         this.changeBackground( body );
 
+
+
     }
 
     /**
@@ -133,7 +170,10 @@ export default class App extends React.Component
     render()
     {
         return (
-            <div className="site">
+            <div
+                className="site"
+                onMouseMove={ this.mouseMove.bind( this ) }
+            >
                 <div className="backfont">Leon Reindl</div>
 
                 {

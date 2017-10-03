@@ -25,13 +25,49 @@ body
 
     background-color: #dddddd;
 
-    -webkit-transition: background-color 750ms linear;
-    -ms-transition: background-color 750ms linear;
-    transition: background-color 750ms linear;
+    -webkit-transition: background-color 400ms ease-out;
+    -ms-transition: background-color 400ms ease-out;
+    transition: background-color 400ms ease-out;
 
     -webkit-font-smoothing: antialiased;
 
     overflow-y: scroll;
+}
+
+* {
+    pointer-events: none;
+}
+
+.left .portfolios {
+   cursor: w-resize;
+    &:active {
+        cursor: w-resize;
+    }
+    &:focus {
+        cursor: w-resize;
+    }
+    &:hover {
+        cursor: w-resize;
+    }
+    &:disabled {
+        cursor: w-resize;
+    }
+}
+
+.right .portfolios {
+    cursor: e-resize;
+    &:active {
+        cursor: e-resize;
+    }
+    &:focus {
+        cursor: e-resize;
+    }
+    &:hover {
+        cursor: e-resize;
+    }
+    &:disabled {
+        cursor: e-resize;
+    }
 }
 
 a:link , a:visited {

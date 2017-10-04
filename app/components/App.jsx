@@ -58,7 +58,7 @@ export default class App extends React.Component
         // load all portfolios into state initially:
         if ( !this.state.portfolios )
         {
-            fetch( `${API_URL}/${PORTFOLIOS_API}` )
+            fetch( `${API_URL}/${PORTFOLIOS_API}?per_page=100` )
                 .then( resp => resp.json() )
                 .then(
                     portfolios =>

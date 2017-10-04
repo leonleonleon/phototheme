@@ -10,7 +10,7 @@ export default class Image extends React.Component
         image     : PropTypes.object,
         align     : PropTypes.string,
         valign    : PropTypes.string,
-        highlight : PropTypes.bool,
+        layout    : PropTypes.string,
         loadFunc  : PropTypes.func,
     }
 
@@ -97,15 +97,15 @@ export default class Image extends React.Component
 
         const initialSrc = imagesObject[ 'full256' ];
 
-        const highlight = this.props.highlight ? 'highlight' : '';
+        const layout = this.props.layout;
 
-        const sizes = this.props.highlight ? '100vw' : '(min-width: 800px) 50vw, 100vw';
+        const sizes = this.props.layout === 'highlight' ? '100vw' : '(min-width: 800px) 50vw, 100vw';
 
 
         return  (
             <div
                 className={ `imagewrapper ${this.props.align}
-                ${this.props.valign} ${highlight}` }
+                ${this.props.valign} ${layout}` }
                 ref={ imageWrapper => this.imageWrapper = imageWrapper }
             >
                 <img

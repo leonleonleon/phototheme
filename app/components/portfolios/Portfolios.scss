@@ -39,6 +39,8 @@
     bottom: 1rem;
     right: 1rem;
     transition: opacity 200ms;
+    z-index: 4;
+    pointer-events: auto!important;
 }
 .show {
     z-index: 1;

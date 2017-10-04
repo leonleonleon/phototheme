@@ -235,8 +235,64 @@ export default class Portfolios extends React.PureComponent
                 //    image={ slides[ prev ].image }
                 //    hidden={ true }
                 ///>
+        console.log( slides[ current ] );
+
         if ( this.state.imageLoaded )
         {
+            if ( slides[ current ].layout === 'twoImages' )
+            {
+                //two pictures
+                return (
+                    <div className="wrapper">
+                        <div
+                            className="portfolios show"
+                            ref={ portfoliosObject => this.portfoliosObject = portfoliosObject }
+                            onClick={ ( event ) => this.handleClick( slides, event, current ) }
+                        >
+                            <Image
+                                image={ slides[ current ].image }
+                                align={ slides[ current ].align }
+                                valign={ slides[ current ].valign }
+                                loadFunc={ this.imagePreloaded.bind( this ) }
+                                layout="first"
+                            />
+                            <Image
+                                image={ slides[ current ].secondimage }
+                                align={ slides[ current ].align }
+                                valign={ slides[ current ].valign }
+                                loadFunc={ this.imagePreloaded.bind( this ) }
+                                layout="second"
+                            />
+                            <Title>{ title }</Title>
+
+                        </div>
+                        <div
+                            className="portfolios"
+                        >
+                            <Image
+                                image={ slides[ next ].image }
+                                align={ slides[ next ].align }
+                                valign={ slides[ next ].valign }
+                                loadFunc={ this.imagePreloaded.bind( this ) }
+                                layout={ slides[ next ].layout }
+                            />
+                        </div>
+                        <div
+                            className="portfolios"
+                        >
+                            <Image
+                                image={ slides[ prev ].image }
+                                align={ slides[ prev ].align }
+                                valign={ slides[ prev ].valign }
+                                loadFunc={ this.imagePreloaded.bind( this ) }
+                                layout={ slides[ prev ].layout }
+                            />
+                        </div>
+                    </div>
+                );
+            }
+
+            // single picture
             return (
                 <div className="wrapper">
                     <div
@@ -249,7 +305,7 @@ export default class Portfolios extends React.PureComponent
                             align={ slides[ current ].align }
                             valign={ slides[ current ].valign }
                             loadFunc={ this.imagePreloaded.bind( this ) }
-                            highlight={ slides[ current ].highlight }
+                            layout={ slides[ current ].layout }
                         />
                         <Title>{ title }</Title>
 
@@ -262,7 +318,7 @@ export default class Portfolios extends React.PureComponent
                             align={ slides[ next ].align }
                             valign={ slides[ next ].valign }
                             loadFunc={ this.imagePreloaded.bind( this ) }
-                            highlight={ slides[ next ].highlight }
+                            layout={ slides[ next ].layout }
                         />
                     </div>
                     <div
@@ -273,7 +329,7 @@ export default class Portfolios extends React.PureComponent
                             align={ slides[ prev ].align }
                             valign={ slides[ prev ].valign }
                             loadFunc={ this.imagePreloaded.bind( this ) }
-                            highlight={ slides[ prev ].highlight }
+                            layout={ slides[ prev ].layout }
                         />
                     </div>
                 </div>
@@ -290,7 +346,7 @@ export default class Portfolios extends React.PureComponent
                     align={ slides[ current ].align }
                     valign={ slides[ current ].valign }
                     loadFunc={ this.showWrapper.bind( this ) }
-                    highlight={ slides[ current ].highlight }
+                    layout={ slides[ current ].layout }
                 />
                 <div className="loader">
                     <Preloader />

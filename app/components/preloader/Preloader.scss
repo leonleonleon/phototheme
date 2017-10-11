@@ -1,6 +1,6 @@
 .preloader {
-  height: 0.25rem;
-  background-color: #333;
+  height: 0.5rem;
+  background-color: #fff;
   width: 0vw;
 
   -webkit-animation: spin 2s ease-out infinite;
@@ -11,15 +11,15 @@
 }
 
 @-webkit-keyframes spin {
-  0% { width: 0vw; margin-left: 0; }
+  0% { width: 0vw; margin-left: 0; background-color: #fff; }
   50% { width: 100vw; margin-left: 0; }
-  75% { width: 50vw; margin-left: 50vw; }
+  75% { width: 50vw; margin-left: 50vw; background-color: #000; }
   100% { width: 0vw; margin-left: 100vw; }
 }
 
 @keyframes spin {
-  0% { width: 0vw; margin-left: 0; }
+  0% { width: 0vw; margin-left: 0; background-color: #fff; }
   50% { width: 100vw; margin-left: 0; }
-  75% { width: 50vw; margin-left: 50vw; }
+  75% { width: 50vw; margin-left: 50vw; background-color: #000; }
   100% { width: 0vw; margin-left: 100vw; }
 }

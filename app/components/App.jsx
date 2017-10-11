@@ -3,6 +3,7 @@ import React                from 'react';
 import PropTypes            from 'prop-types';
 // import Footer               from 'footer/Footer.jsx';
 // import Header               from 'header/Header.jsx';
+import Title                from 'portfolios/Title.jsx';
 import { findIndex,
          cloneDeep }        from 'lodash';
 import { API_URL,
@@ -21,13 +22,13 @@ export default class App extends React.Component
         ] ),
         params      : PropTypes.object,
         location    : PropTypes.object,
+        history     : PropTypes.object,
     }
 
     state = {
-        portfolios  : null,
-        portfolio   : null,
-        preloader   : true,
-        slides      : null,
+        portfolios   : null,
+        preloader    : true,
+        slides       : null,
     }
 
     /**
@@ -67,7 +68,12 @@ export default class App extends React.Component
                         const tempSlides = [];
                         let counter = 0;
 
-                        portfolios.map( ( portfolio ) =>
+                        // shuffle portfolios
+                        const shuffleArray = ( arr ) => arr.sort( () => Math.random() - 0.5 );
+
+                        const shuffle = shuffleArray( portfolios );
+                        // portfolios.map( ( portfolio ) =>
+                        shuffle.map( ( portfolio ) =>
                         {
                             portfolio.acf.slides.map( ( slide, index ) =>
                             {
@@ -76,6 +82,7 @@ export default class App extends React.Component
                                 newSlide[ 'portfolioTitle' ] = portfolio.title.rendered;
                                 newSlide[ 'index' ] = index;
                                 newSlide[ 'slideIndex' ] = counter;
+                                newSlide[ 'content' ] = portfolio.content.rendered;
 
                                 counter += 1;
                                 tempSlides.push( newSlide );
@@ -118,32 +125,34 @@ export default class App extends React.Component
         const mouseX = event.clientX;
         const windowCenter = window.innerWidth / 2;
 
+        const element = document.getElementsByTagName( 'html' )[ 0 ];
+
         // left
         if ( mouseX < windowCenter )
         {
-            document.getElementsByTagName( 'body' )[ 0 ].classList.remove( 'right' );
-            document.getElementsByTagName( 'body' )[ 0 ].classList.add( 'left' );
+            element.classList.remove( 'rightmouse' );
+            element.classList.add( 'leftmouse' );
         }
         else
         {
-            document.getElementsByTagName( 'body' )[ 0 ].classList.remove( 'left' );
-            document.getElementsByTagName( 'body' )[ 0 ].classList.add( 'right' );
+            element.classList.remove( 'leftmouse' );
+            element.classList.add( 'rightmouse' );
         }
     }
-    //  /**
-    //  * componentWillMount
-    //  */
-    // componentWillMount()
-    // {
-    //     window.addEventListener( 'onMouseMove', this.mouseMove.bind( this ) );
-    // }
-    // /**
-    //  * componentWillUnmount
-    //  */
-    // componentWillUnmount()
-    // {
-    //     window.removeEventListener( 'onMouseMove', this.mouseMove.bind( this ) );
-    // }
+     /**
+     * componentWillMount
+     */
+    componentWillMount()
+    {
+        window.addEventListener( 'mousemove', this.mouseMove.bind( this ) );
+    }
+    /**
+     * componentWillUnmount
+     */
+    componentWillUnmount()
+    {
+        window.removeEventListener( 'mousemove', this.mouseMove.bind( this ) );
+    }
 
     /**
      * ## componentDidMount
@@ -154,9 +163,9 @@ export default class App extends React.Component
     {
         this.fetchData();
 
-        const body = document.getElementsByTagName( 'body' )[ 0 ];
+        // const body = document.getElementsByTagName( 'body' )[ 0 ];
 
-        this.changeBackground( body );
+        // this.changeBackground( body );
 
 
 
@@ -169,12 +178,19 @@ export default class App extends React.Component
      */
     render()
     {
+        const mOne = 'info';
+        const mTwo = 'leonreindl';
+        //                 onMouseMove={ this.mouseMove.bind( this ) }
+
         return (
             <div
                 className="site"
-                onMouseMove={ this.mouseMove.bind( this ) }
             >
-                <div className="backfont">Leon Reindl</div>
+                <Title
+                    firstText="Leon Reindl"
+                    secondText={ `${mOne}@${mTwo}.de / +49 178 40 80 478` }
+                    className="backfont"
+                />
 
                 {
                     React.Children.map(

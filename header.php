@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <?php
 
+http_response_code(206);
+
 $iPod    = stripos($_SERVER['HTTP_USER_AGENT'],"iPod");
 $iPhone  = stripos($_SERVER['HTTP_USER_AGENT'],"iPhone");
 $iPad    = stripos($_SERVER['HTTP_USER_AGENT'],"iPad");
@@ -14,11 +16,17 @@ $iPad    = stripos($_SERVER['HTTP_USER_AGENT'],"iPad");
 <head>
 <?php
 $url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-$slug = str_replace('portfolio', '', $_SERVER[REQUEST_URI]);
-$slug = str_replace('/', '', $slug);
+// $slug = str_replace('portfolio', '', $_SERVER[REQUEST_URI]);
+$slug = $_SERVER[REQUEST_URI];
+$keys = explode('/', $slug);
+// $slug = str_replace('/', '', $slug);
+
+$name = $keys[ 1 ];
+$slide = !$keys[ 2 ] ? 0 : $keys[ 2 ];
+
 
 $args = array(
-  'name'        => $slug,
+  'name'        => $name,
   'post_type'   => 'portfolios',
   'post_status' => 'publish',
   'numberposts' => 1
@@ -26,12 +34,11 @@ $args = array(
 $my_posts = get_posts($args);
 
 if( $my_posts) :
-
-    $id = $my_posts[0]->ID;
+    $id = $my_posts[ 0 ]->ID;
     $slides = get_field('slides', $id);
-    $firstImage = $slides[0]['image']['sizes']['full1536'];
-    $imageWidth = $slides[0]['image']['sizes']['full1536-width'];
-    $imageHeight = $slides[0]['image']['sizes']['full1536-height'];
+    $firstImage = $slides[ $slide ]['image']['sizes']['full1536'];
+    $imageWidth = $slides[ $slide ]['image']['sizes']['full1536-width'];
+    $imageHeight = $slides[ $slide ]['image']['sizes']['full1536-height'];
     $title = ($slug ? get_the_title($id) : '');
 
 endif;
@@ -42,7 +49,7 @@ endif;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="apple-mobile-web-app-title" content="dev.LR">
+    <meta name="apple-mobile-web-app-title" content="photo.LR">
     <meta name="description" content="Portfolio of photographer Leon Reindl" />
     <meta name="author" content="Leon Reindl" />
     <meta property="og:type" content="website" />

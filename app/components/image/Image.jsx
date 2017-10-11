@@ -31,9 +31,27 @@ export default class Image extends React.Component
      */
     componentDidMount()
     {
-
+        // if (  this.imageObject != undefined && this.imageObject.complete )
+        // {
+        //     this.imageObject.src = this.imageObject.src;
+        // }
     }
-
+    /**
+     * ## componentDidUpdate
+     *
+     * loads the settings from the settings server
+     */
+    componentDidUpdate()
+    {
+        if ( this.imageObject != undefined && this.imageObject.complete )
+        {
+            this.props.loadFunc();
+        }
+        else
+        {
+            this.imageObject.load;
+        }
+    }
     /**
      *  getImageUrl
      *
@@ -93,12 +111,15 @@ export default class Image extends React.Component
     {
         const imagesObject = this.props.image.sizes;
 
+        const id = this.props.image.id;
+
         const srcSet = this.getImageUrl( imagesObject );
 
         const initialSrc = imagesObject[ 'full256' ];
 
         const layout = this.props.layout;
 
+        // eslint-disable-next-line
         const sizes = this.props.layout === 'highlight' ? '100vw' : '(min-width: 800px) 50vw, 100vw';
 
 
@@ -109,11 +130,12 @@ export default class Image extends React.Component
                 ref={ imageWrapper => this.imageWrapper = imageWrapper }
             >
                 <img
-                    src={ initialSrc }
                     ref={ imageObject => this.imageObject = imageObject }
                     onLoad={ this.props.loadFunc }
                     srcSet={ srcSet }
                     sizes={ sizes }
+                    src={ initialSrc }
+                    key={ id }
                 />
             </div>
         );

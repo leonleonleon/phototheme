@@ -6,7 +6,13 @@ import PropTypes                from 'prop-types';
 export default class Title extends React.Component
 {
     static propTypes = {
-        children    : PropTypes.string,
+        firstText    : PropTypes.string,
+        secondText   : PropTypes.string,
+        className    : PropTypes.string,
+    }
+
+    state = {
+        showSecondText : false,
     }
     /**
      * ## constructor
@@ -27,6 +33,30 @@ export default class Title extends React.Component
     {
 
     }
+
+    /**
+     * handleClick
+     * @param  {[event]} event [description]
+     */
+    handeClick = ( event ) =>
+    {
+        const { showSecondText } = this.state;
+
+        event.stopPropagation();
+
+        if ( showSecondText )
+        {
+            this.setState( {
+                showSecondText : false,
+            } );
+        }
+        else
+        {
+            this.setState( {
+                showSecondText : true,
+            } );
+        }
+    }
     /**
      *  Title Render
      *
@@ -34,12 +64,28 @@ export default class Title extends React.Component
      */
     render()
     {
+        const { showSecondText } = this.state;
+        const className = this.props.className;
+        const firstText = { __html : this.props.firstText };
+        const secondText = { __html : this.props.secondText };
+
+        if ( showSecondText )
+        {
+            return  (
+                <div
+                    onClick={ this.handeClick.bind( this ) }
+                    className={ className }
+                    dangerouslySetInnerHTML={ secondText }
+                />
+            );
+        }
+
         return  (
             <div
-                className="title"
-            >
-                { this.props.children }
-            </div>
+                onClick={ this.handeClick.bind( this ) }
+                className={ className }
+                dangerouslySetInnerHTML={ firstText }
+            />
         );
     }
 }

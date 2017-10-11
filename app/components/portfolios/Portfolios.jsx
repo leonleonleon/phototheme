@@ -1,10 +1,9 @@
 import './Portfolios.scss';
 import React            from 'react';
 import PropTypes        from 'prop-types';
-import Image            from 'image/Image.jsx';
 
 import Preloader        from 'preloader/Preloader.jsx';
-import Title            from './Title.jsx';
+import Slide            from 'slide/Slide.jsx';
 
 import { browserHistory }        from 'react-router';
 
@@ -22,6 +21,7 @@ export default class Portfolios extends React.PureComponent
 
     state = {
         imageLoaded : false,
+        lastSlide   : null,
     }
 
     /**
@@ -32,6 +32,7 @@ export default class Portfolios extends React.PureComponent
     keyDown = ( event ) =>
     {
         let evt = event;
+
         if ( !evt )
         {
             evt = window.event;
@@ -39,17 +40,28 @@ export default class Portfolios extends React.PureComponent
         const keycode = evt.keyCode || evt.which; // also for cross-browser compatible
 
         const { slides } = this.props;
-        const currentSlide = slides.find( this.findSlide );
-        const current = currentSlide.slideIndex;
 
-        switch ( keycode )
+
+        const currentSlide = slides.find( this.findSlide );
+
+        if ( currentSlide != undefined )
         {
-        case 37:
-            this.prevSlide( current, slides );
-            break;
-        case 39:
-            this.nextSlide( current, slides );
-            break;
+            const current = currentSlide.slideIndex;
+
+            const imageLoaded = this.state.imageLoaded;
+
+            if ( imageLoaded )
+            {
+                switch ( keycode )
+                {
+                case 37:
+                    this.prevSlide( current, slides );
+                    break;
+                case 39:
+                    this.nextSlide( current, slides );
+                    break;
+                }
+            }
         }
     }
     /**
@@ -67,24 +79,34 @@ export default class Portfolios extends React.PureComponent
     {
         window.removeEventListener( 'keydown', this.keyDown );
     }
-
-    hideWrapper = () =>
+    /**
+     * [hideWrapper]
+     * @param  {[current]} current [description]
+     */
+    hideWrapper = ( current ) =>
     {
         if ( this.portfoliosObject != undefined )
         {
-            this.portfoliosObject.classList.remove( 'show' );
+            this.portfoliosObject.classList.add( 'bye' );
         }
 
-        this.setState( { imageLoaded : false } );
+        this.setState( {
+            imageLoaded : false,
+            lastSlide   : current,
+        } );
     }
+    /**
+     * [showWrapper]
+     */
     showWrapper = () =>
     {
-        if ( this.portfoliosObject != undefined )
-        {
-            this.portfoliosObject.classList.add( 'show' );
-        }
-
-        this.setState( { imageLoaded : true } );
+        // if ( this.portfoliosObject != undefined )
+        // {
+        //     this.portfoliosObject.classList.add( 'show' );
+        // }
+        this.setState( {
+            imageLoaded : true,
+        } );
     }
     /**
      * ImagePreloaded
@@ -102,7 +124,7 @@ export default class Portfolios extends React.PureComponent
      */
     nextSlide = ( current, slides ) =>
     {
-        this.hideWrapper();
+        this.hideWrapper( current );
 
         // setTimeout( () =>
         // {
@@ -130,7 +152,7 @@ export default class Portfolios extends React.PureComponent
      */
     prevSlide = ( current, slides ) =>
     {
-        this.hideWrapper();
+        this.hideWrapper( current );
 
         // setTimeout( () =>
         // {
@@ -163,6 +185,7 @@ export default class Portfolios extends React.PureComponent
      */
     handleClick( slides, event, current )
     {
+        // event.stopPropagation();
         event.preventDefault();
 
         const mouseX = event.pageX;
@@ -197,7 +220,6 @@ export default class Portfolios extends React.PureComponent
         //     return slide.slideIndex;
         // }
     }
-
     /**
      *  Portfolios Render
      *
@@ -209,7 +231,14 @@ export default class Portfolios extends React.PureComponent
 
         // const { portfolio, index } = this.props.params;
 
-        if ( preloader || slides.length === 0 ) return <Preloader />;
+        if ( preloader || slides.length === 0 )
+        {
+            return (
+                <div className="loader">
+                    <Preloader />
+                </div>
+            );
+        }
 
         const currentSlide = slides.find( this.findSlide );
         const random = Math.floor( Math.random() * ( slides.length - 1 ) );
@@ -221,137 +250,93 @@ export default class Portfolios extends React.PureComponent
 
         const prev = current - 1 >= 1 ? current - 1 : slideNum;
 
-        const title = slides[ current ].title != '' ? slides[ current ].title : slides[ current ].portfolioTitle; //eslint-disable-line
+        // eslint-disable-next-line
+        // const title = slides[ current ].title != '' ? slides[ current ].title : slides[ current ].portfolioTitle;
 
         const body = document.getElementsByTagName( 'body' )[ 0 ];
 
         body.style.background = slides[ current ].background;
 
-                //<Image
-                //    image={ slides[ next ].image }
-                //    hidden={ true }
-                ///>
-                //<Image
-                //    image={ slides[ prev ].image }
-                //    hidden={ true }
-                ///>
-        console.log( slides[ current ] );
+        // if images not loaded
 
-        if ( this.state.imageLoaded )
+        if ( !this.state.imageLoaded )
         {
-            if ( slides[ current ].layout === 'twoImages' )
+            const lastSlide = this.state.lastSlide;
+
+            if ( lastSlide != undefined && lastSlide != null )
             {
-                //two pictures
                 return (
                     <div className="wrapper">
                         <div
-                            className="portfolios show"
-                            ref={ portfoliosObject => this.portfoliosObject = portfoliosObject }
-                            onClick={ ( event ) => this.handleClick( slides, event, current ) }
+                            className="portfolios bye"
                         >
-                            <Image
-                                image={ slides[ current ].image }
-                                align={ slides[ current ].align }
-                                valign={ slides[ current ].valign }
-                                loadFunc={ this.imagePreloaded.bind( this ) }
-                                layout="first"
-                            />
-                            <Image
-                                image={ slides[ current ].secondimage }
-                                align={ slides[ current ].align }
-                                valign={ slides[ current ].valign }
-                                loadFunc={ this.imagePreloaded.bind( this ) }
-                                layout="second"
-                            />
-                            <Title>{ title }</Title>
-
-                        </div>
-                        <div
-                            className="portfolios"
-                        >
-                            <Image
-                                image={ slides[ next ].image }
-                                align={ slides[ next ].align }
-                                valign={ slides[ next ].valign }
-                                loadFunc={ this.imagePreloaded.bind( this ) }
-                                layout={ slides[ next ].layout }
+                            <Slide
+                                loadFunc={ this.imagePreloaded }
+                                slide={ slides[ lastSlide ] }
                             />
                         </div>
                         <div
                             className="portfolios"
                         >
-                            <Image
-                                image={ slides[ prev ].image }
-                                align={ slides[ prev ].align }
-                                valign={ slides[ prev ].valign }
-                                loadFunc={ this.imagePreloaded.bind( this ) }
-                                layout={ slides[ prev ].layout }
+                            <Slide
+                                loadFunc={ this.showWrapper.bind( this ) }
+                                slide={ slides[ current ] }
                             />
+                            <div className="loader">
+                                <Preloader />
+                            </div>
                         </div>
                     </div>
                 );
             }
 
-            // single picture
             return (
-                <div className="wrapper">
-                    <div
-                        className="portfolios show"
-                        ref={ portfoliosObject => this.portfoliosObject = portfoliosObject }
-                        onClick={ ( event ) => this.handleClick( slides, event, current ) }
-                    >
-                        <Image
-                            image={ slides[ current ].image }
-                            align={ slides[ current ].align }
-                            valign={ slides[ current ].valign }
-                            loadFunc={ this.imagePreloaded.bind( this ) }
-                            layout={ slides[ current ].layout }
-                        />
-                        <Title>{ title }</Title>
+                <div
+                    className="portfolios"
+                >
+                    <Slide
+                        loadFunc={ this.showWrapper.bind( this ) }
+                        slide={ slides[ current ] }
+                    />
+                    <div className="loader">
+                        <Preloader />
+                    </div>
 
-                    </div>
-                    <div
-                        className="portfolios"
-                    >
-                        <Image
-                            image={ slides[ next ].image }
-                            align={ slides[ next ].align }
-                            valign={ slides[ next ].valign }
-                            loadFunc={ this.imagePreloaded.bind( this ) }
-                            layout={ slides[ next ].layout }
-                        />
-                    </div>
-                    <div
-                        className="portfolios"
-                    >
-                        <Image
-                            image={ slides[ prev ].image }
-                            align={ slides[ prev ].align }
-                            valign={ slides[ prev ].valign }
-                            loadFunc={ this.imagePreloaded.bind( this ) }
-                            layout={ slides[ prev ].layout }
-                        />
-                    </div>
                 </div>
             );
         }
+        // eslint-disable-next-line
+        const slideTitle = slides[ current ].title != '' ? slides[ current ].title : slides[ current ].portfolioTitle;
+
+        document.title = `Leon Reindl / ${slideTitle}`;
 
         return (
-            <div
-                className="portfolios"
-                ref={ portfoliosObject => this.portfoliosObject = portfoliosObject }
-            >
-                <Image
-                    image={ slides[ current ].image }
-                    align={ slides[ current ].align }
-                    valign={ slides[ current ].valign }
-                    loadFunc={ this.showWrapper.bind( this ) }
-                    layout={ slides[ current ].layout }
-                />
-                <div className="loader">
-                    <Preloader />
+            <div className="wrapper">
+                <div
+                    className="portfolios show"
+                    onClick={ ( event ) => this.handleClick( slides, event, current ) }
+                >
+                    <Slide
+                        loadFunc={ this.imagePreloaded }
+                        slide={ slides[ current ] }
+                    />
                 </div>
-
+                <div
+                    className="portfolios"
+                >
+                    <Slide
+                        loadFunc={ this.imagePreloaded }
+                        slide={ slides[ next ] }
+                    />
+                </div>
+                <div
+                    className="portfolios"
+                >
+                    <Slide
+                        loadFunc={ this.imagePreloaded }
+                        slide={ slides[ prev ] }
+                    />
+                </div>
             </div>
         );
     }

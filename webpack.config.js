@@ -54,6 +54,10 @@ const config = {
                 use     : [ { loader : 'file-loader?name=../img/[name].[ext]' } ],
             },
             {
+                test    : /\.(cur|ani)$/,
+                use     : [ { loader : 'file-loader?name=../img/[name].[ext]' } ],
+            },
+            {
                 test    : /\.scss$/i,
                 include : APP_DIR,
                 use     : extractCSS.extract( [ 'css-loader', 'sass-loader' ] ),

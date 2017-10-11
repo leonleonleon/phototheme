@@ -16,8 +16,12 @@
         transition: opacity 200ms ease-out;
     }
 }
-.imagewrapper.first ,.imagewrapper.second {
-    height: calc( 50% - 6rem );
+.imagewrapper.first  {
+    height: calc( 50% - 4rem );
+}
+.imagewrapper.second {
+    margin-top: 0rem;
+    height: calc( 50% - 4rem );
 }
 
 @media #{$phonescape} {
@@ -75,7 +79,7 @@
     }
     .right.middle {
         img {
-            transform: translate( 0%, -50% );
+            transform: translate( -25%, -50% );
         }
     }
     .right.bottom {
@@ -87,27 +91,29 @@
 
         img {
             transform: translate( -50%, -50% );
-            max-width: calc(100% - 6rem);
+            max-width: calc(100% - 2rem);
             max-height: calc(100% - 6rem);
         }
     }
     .imagewrapper.first {
+        // background-color: red;
         width: 50%;
         position: absolute;
         height: 100%;
         img {
-            max-width: 75%;
-            max-height: 75%;
+            max-width: 27.5vw;
+            max-height: calc( 50% - 2rem );
         }
     }
     .imagewrapper.second {
+        // background-color: green;
         left: 50%;
         width: 50%;
         position: absolute;
         height: 100%;
         img {
-            max-width: 75%;
-            max-height: 75%;
+            max-width: 27.5vw;
+            max-height: calc( 50% - 2rem );
         }
     }
 }

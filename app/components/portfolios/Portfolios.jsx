@@ -17,11 +17,13 @@ export default class Portfolios extends React.PureComponent
         portfolios  : PropTypes.array,
         params      : PropTypes.object,
         slides      : PropTypes.array,
+        random      : PropTypes.number,
     }
 
     state = {
-        imageLoaded : false,
-        lastSlide   : null,
+        imageLoaded  : false,
+        lastSlide    : null,
+        current      : null,
     }
 
     /**
@@ -98,15 +100,26 @@ export default class Portfolios extends React.PureComponent
     /**
      * [showWrapper]
      */
-    showWrapper = () =>
+    showWrapper = ( ) =>
     {
         // if ( this.portfoliosObject != undefined )
         // {
         //     this.portfoliosObject.classList.add( 'show' );
         // }
-        this.setState( {
-            imageLoaded : true,
-        } );
+
+        // if ( event != undefined )
+        // {
+        //     console.log( 'Event', event.target );
+        // }
+        // console.log( 'showWrapper', this );
+
+        if ( !this.state.loaded )
+        {
+            this.setState( {
+                imageLoaded : true,
+            } );
+        }
+
     }
     /**
      * ImagePreloaded
@@ -114,6 +127,8 @@ export default class Portfolios extends React.PureComponent
      */
     imagePreloaded = ( ) =>
     {
+        // console.log( 'imagePreloaded', this );
+
         return null;
     }
 
@@ -227,8 +242,7 @@ export default class Portfolios extends React.PureComponent
      */
     render()
     {
-        const { preloader, slides } = this.props;
-
+        const { preloader, slides, random } = this.props;
         // const { portfolio, index } = this.props.params;
 
         if ( preloader || slides.length === 0 )
@@ -241,8 +255,9 @@ export default class Portfolios extends React.PureComponent
         }
 
         const currentSlide = slides.find( this.findSlide );
-        const random = Math.floor( Math.random() * ( slides.length - 1 ) );
+
         const current = currentSlide === undefined ? random : currentSlide.slideIndex;
+
 
         const slideNum = slides.length - 1;
 
@@ -272,6 +287,7 @@ export default class Portfolios extends React.PureComponent
                         >
                             <Slide
                                 loadFunc={ this.imagePreloaded }
+                                key={ `sld${slides[ lastSlide ].slideIndex}` }
                                 slide={ slides[ lastSlide ] }
                             />
                         </div>
@@ -280,6 +296,7 @@ export default class Portfolios extends React.PureComponent
                         >
                             <Slide
                                 loadFunc={ this.showWrapper.bind( this ) }
+                                key={ `sld${slides[ current ].slideIndex}` }
                                 slide={ slides[ current ] }
                             />
                             <div className="loader">
@@ -296,6 +313,7 @@ export default class Portfolios extends React.PureComponent
                 >
                     <Slide
                         loadFunc={ this.showWrapper.bind( this ) }
+                        key={ `sld${slides[ current ].slideIndex}` }
                         slide={ slides[ current ] }
                     />
                     <div className="loader">
@@ -318,6 +336,7 @@ export default class Portfolios extends React.PureComponent
                 >
                     <Slide
                         loadFunc={ this.imagePreloaded }
+                        key={ `sld${slides[ current ].slideIndex}` }
                         slide={ slides[ current ] }
                     />
                 </div>
@@ -326,6 +345,7 @@ export default class Portfolios extends React.PureComponent
                 >
                     <Slide
                         loadFunc={ this.imagePreloaded }
+                        key={ `sld${slides[ next ].slideIndex}` }
                         slide={ slides[ next ] }
                     />
                 </div>
@@ -334,6 +354,7 @@ export default class Portfolios extends React.PureComponent
                 >
                     <Slide
                         loadFunc={ this.imagePreloaded }
+                        key={ `sld${slides[ prev ].slideIndex}` }
                         slide={ slides[ prev ] }
                     />
                 </div>

@@ -9,15 +9,37 @@ import 'whatwg-fetch';
 import App              from 'components/App.jsx';
 import Portfolios       from 'components/portfolios/Portfolios.jsx';
 
+
+
 render(
     <Router
         history={ browserHistory }
-        onUpdate={ () =>
+        onUpdate={ ( ) =>
         {
-            window.scrollTo( 0, document.body.scrollHeight );
-        } }
+            if ( typeof window.ga === 'function' )
+            {
+                // eslint-disable-next-line
+                window.gtag('config', 'UA-46475543-1', {
+                    // 'page_title'    : document.title,
+                    // 'page_location' : document.location.pathname,
+                    'page_path'     : document.location.pathname,
+                }
+                );
+            }
+            else
+            {
+                console.warn( 'No Goole gtag found!' );
+            }
+
+            return null;
+        }
+        }
     >
-        <Route path="/" component={ App } history={ browserHistory }>
+        <Route
+            path="/"
+            component={ App }
+            history={ browserHistory }
+        >
             <IndexRoute component={ Portfolios } history={ browserHistory } />
             <Route
                 path="/:portfolio(/:index)"

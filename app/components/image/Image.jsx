@@ -12,6 +12,7 @@ export default class Image extends React.Component
         valign    : PropTypes.string,
         layout    : PropTypes.string,
         loadFunc  : PropTypes.func,
+        slide     : PropTypes.object,
     }
 
     /**
@@ -49,7 +50,7 @@ export default class Image extends React.Component
         }
         else
         {
-            this.imageObject.load;
+            this.imageObject.src = this.imageObject.src;
         }
     }
     /**
@@ -113,6 +114,7 @@ export default class Image extends React.Component
 
         const id = this.props.image.id;
 
+
         const srcSet = this.getImageUrl( imagesObject );
 
         const initialSrc = imagesObject[ 'full256' ];
@@ -121,7 +123,6 @@ export default class Image extends React.Component
 
         // eslint-disable-next-line
         const sizes = this.props.layout === 'highlight' ? '100vw' : '(min-width: 800px) 50vw, 100vw';
-
 
         return  (
             <div
@@ -135,7 +136,7 @@ export default class Image extends React.Component
                     srcSet={ srcSet }
                     sizes={ sizes }
                     src={ initialSrc }
-                    key={ id }
+                    key={ `img${id}` }
                 />
             </div>
         );

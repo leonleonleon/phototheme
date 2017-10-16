@@ -89,10 +89,14 @@ export default class App extends React.Component
                             } );
                         } );
 
+
+                        const random = Math.floor( Math.random() * ( tempSlides.length - 1 ) );
+
                         const newState = {
                             portfolios  : cloneDeep( portfolios ),
                             preloader   : false,
                             slides      : tempSlides,
+                            random      : random,
                         };
 
                         this.setState( newState );
@@ -181,6 +185,14 @@ export default class App extends React.Component
         const mOne = 'info';
         const mTwo = 'leonreindl';
         //                 onMouseMove={ this.mouseMove.bind( this ) }
+        // eslint-disable-next-line
+        if ( ( navigator.userAgent.match( /iPhone/i ) ) || ( navigator.userAgent.match( /iPod/i ) ) )
+        {
+            if ( window.innerHeight < window.innerWidth )
+            {
+                document.getElementsByTagName( 'html' )[ 0 ].style.height = 'calc( 100% + 1px)';
+            }
+        }
 
         return (
             <div

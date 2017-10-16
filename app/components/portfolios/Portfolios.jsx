@@ -268,10 +268,6 @@ export default class Portfolios extends React.PureComponent
         // eslint-disable-next-line
         // const title = slides[ current ].title != '' ? slides[ current ].title : slides[ current ].portfolioTitle;
 
-        const body = document.getElementsByTagName( 'body' )[ 0 ];
-
-        body.style.background = slides[ current ].background;
-
         // if images not loaded
 
         if ( !this.state.imageLoaded )
@@ -306,6 +302,10 @@ export default class Portfolios extends React.PureComponent
                     </div>
                 );
             }
+
+            const body = document.getElementsByTagName( 'body' )[ 0 ];
+
+            body.style.background = slides[ current ].background;
 
             return (
                 <div
